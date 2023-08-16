@@ -1,7 +1,6 @@
 import React from 'react'
 
 import {
-  CAvatar,
   CProgress,
   CTable,
   CTableBody,
@@ -10,171 +9,110 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from '@coreui/react'
+import * as coreuiIcons from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-  cilPeople,
-} from '@coreui/icons'
-
-import avatar1 from 'src/assets/images/avatars/1.jpg'
-import avatar2 from 'src/assets/images/avatars/2.jpg'
-import avatar3 from 'src/assets/images/avatars/3.jpg'
-import avatar4 from 'src/assets/images/avatars/4.jpg'
-import avatar5 from 'src/assets/images/avatars/5.jpg'
-import avatar6 from 'src/assets/images/avatars/6.jpg'
+import jsonData from './Provider'
 
 
 const Dashboard = () => {
-  const tableExample = [
-    {
-      avatar: {src: avatar1, status: 'success'},
-      user: {
-        name: 'Yiorgos Avraamu',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: {name: 'USA', flag: cifUs},
-      usage: {
-        value: 50,
-        period: 'Jun 11, 2021 - Jul 10, 2021',
-        color: 'success',
-      },
-      payment: {name: 'Mastercard', icon: cibCcMastercard},
-      activity: '10 sec ago',
-    },
-    {
-      avatar: {src: avatar2, status: 'danger'},
-      user: {
-        name: 'Avram Tarasios',
-        new: false,
-        registered: 'Jan 1, 2021',
-      },
-      country: {name: 'Brazil', flag: cifBr},
-      usage: {
-        value: 22,
-        period: 'Jun 11, 2021 - Jul 10, 2021',
-        color: 'info',
-      },
-      payment: {name: 'Visa', icon: cibCcVisa},
-      activity: '5 minutes ago',
-    },
-    {
-      avatar: {src: avatar3, status: 'warning'},
-      user: {name: 'Quintin Ed', new: true, registered: 'Jan 1, 2021'},
-      country: {name: 'India', flag: cifIn},
-      usage: {
-        value: 74,
-        period: 'Jun 11, 2021 - Jul 10, 2021',
-        color: 'warning',
-      },
-      payment: {name: 'Stripe', icon: cibCcStripe},
-      activity: '1 hour ago',
-    },
-    {
-      avatar: {src: avatar4, status: 'secondary'},
-      user: {name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2021'},
-      country: {name: 'France', flag: cifFr},
-      usage: {
-        value: 98,
-        period: 'Jun 11, 2021 - Jul 10, 2021',
-        color: 'danger',
-      },
-      payment: {name: 'PayPal', icon: cibCcPaypal},
-      activity: 'Last month',
-    },
-    {
-      avatar: {src: avatar5, status: 'success'},
-      user: {
-        name: 'Agapetus Tadeáš',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: {name: 'Spain', flag: cifEs},
-      usage: {
-        value: 22,
-        period: 'Jun 11, 2021 - Jul 10, 2021',
-        color: 'primary',
-      },
-      payment: {name: 'Google Wallet', icon: cibCcApplePay},
-      activity: 'Last week',
-    },
-    {
-      avatar: {src: avatar6, status: 'danger'},
-      user: {
-        name: 'Friderik Dávid',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: {name: 'Poland', flag: cifPl},
-      usage: {
-        value: 43,
-        period: 'Jun 11, 2021 - Jul 10, 2021',
-        color: 'success',
-      },
-      payment: {name: 'Amex', icon: cibCcAmex},
-      activity: 'Last week',
-    },
-  ]
+
+  const Average = (max, min) => {
+    if(max !== undefined && min !== undefined) {
+      return (max + min) / 2;
+    }
+    else {
+      return null;
+    }
+  }
+
+  const progressColor = (average) => {
+    if (average < 25) {
+      return 'success';
+    }
+    if (average <= 50 && average >= 25) {
+      return 'warning';
+    }
+    if (average > 50) {
+      return 'danger'
+    }
+  }
+
+  function formatDate(inputDate) {
+    const dateParts = inputDate.split('-');
+    const year = dateParts[0].substring(2); // Get last two digits of the year
+    const month = dateParts[1];
+    const day = dateParts[2];
+    return `${day}/${month}/${year}`;
+  }
+
+  function formatCountryCode(countryCode) {
+    return "cif" + countryCode.charAt(0).toUpperCase() + countryCode.charAt(1).toLowerCase();
+  }
+
+  function formatDateTime(dateTimeString) {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+    const dateTime = new Date(dateTimeString);
+    return dateTime.toLocaleString('en-US', options);
+  }
 
   return (
     <>
       <CTable align="middle" className="mb-0 border" hover responsive>
         <CTableHead color="light">
           <CTableRow>
-            <CTableHeaderCell className="text-center">
-              <CIcon icon={cilPeople}/>
-            </CTableHeaderCell>
-            <CTableHeaderCell>User</CTableHeaderCell>
+            <CTableHeaderCell>Company Airline</CTableHeaderCell>
             <CTableHeaderCell className="text-center">Country</CTableHeaderCell>
-            <CTableHeaderCell>Usage</CTableHeaderCell>
-            <CTableHeaderCell className="text-center">Payment Method</CTableHeaderCell>
-            <CTableHeaderCell>Activity</CTableHeaderCell>
+            <CTableHeaderCell className="text-center">Departure Information</CTableHeaderCell>
+            <CTableHeaderCell className="text-center">Arrival Information</CTableHeaderCell>
+            <CTableHeaderCell>Weather description</CTableHeaderCell>
+            <CTableHeaderCell className="text-center">
+              Probability of flight cancellation
+            </CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          {tableExample.map((item, index) => (
+          {jsonData.map((item, index) => (
             <CTableRow v-for="item in tableItems" key={index}>
               <CTableDataCell className="text-center">
-                <CAvatar size="md" src={item.avatar.src} status={item.avatar.status}/>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>{item.user.name}</div>
-                <div className="small text-medium-emphasis">
-                  <span>{item.user.new ? 'New' : 'Recurring'}</span> | Registered:{' '}
-                  {item.user.registered}
-                </div>
+                 <span>{item.company_airline}</span>
               </CTableDataCell>
               <CTableDataCell className="text-center">
-                <CIcon size="xl" icon={item.country.flag} title={item.country.name}/>
+                <CIcon size="xl" icon={coreuiIcons[formatCountryCode(item.country)]} title={item.country}/>
+              </CTableDataCell>
+              <CTableDataCell className="text-center">
+                <strong>{item.departure_city}</strong>
+                <div>{item.departure_airport}</div>
+                <span className='text-info'>{formatDateTime(item.departure_scheduled)}</span>
+              </CTableDataCell>
+              <CTableDataCell className="text-center">
+                <strong>{item.arrival_city}</strong>
+                <div>{item.arrival_airport}</div>
+                <span className='text-info'>{formatDateTime(item.arrival_scheduled)}</span>
               </CTableDataCell>
               <CTableDataCell>
-                <div className="clearfix">
+                <div className="">
+                  <strong>{item.description}</strong>
+                  <br/>
+                  <u className='text-warning'>Max Temperature:</u> {item.max_temperature}°
+                  <br/>
+                  <u className='text-success'>Min Temperature:</u> {item.min_temperature}°
+                </div>
+              </CTableDataCell>
+              <CTableDataCell>
+                <div className="">
                   <div className="float-start">
-                    <strong>{item.usage.value}%</strong>
+                    <strong>{Average(item.max_chance, item.min_chance)} %</strong>
                   </div>
-                  <div className="float-end">
-                    <small className="text-medium-emphasis">{item.usage.period}</small>
+                  <br />
+                  <div>
+                    <u className='text-info text-sm' style={{fontSize: '12px'}}>Forecast Day: </u>
+                    <small className="text-medium-emphasis">{formatDate(item.forecast_day)}</small>
                   </div>
+                <span>Average</span>
+                <CProgress thin
+                           color={progressColor(Average(item.max_chance, item.min_chance))}
+                           value={Average(item.max_chance, item.min_chance)}/>
                 </div>
-                <CProgress thin color={item.usage.color} value={item.usage.value}/>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <CIcon size="xl" icon={item.payment.icon}/>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="small text-medium-emphasis">Last login</div>
-                <strong>{item.activity}</strong>
               </CTableDataCell>
             </CTableRow>
           ))}
