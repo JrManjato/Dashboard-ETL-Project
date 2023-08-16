@@ -29,10 +29,10 @@
     "city": "İstanbul",
     "country": "TR",
     "timezone": "Europe/Istanbul",
-    "forecast_day": "2023-08-15",
-    "max_temperature": 30.6,
-    "min_temperature": 25.8,
-    "weather_code": 802,
+    "forecast_day": "2023-08-25",
+    "max_temperature": 20.6,
+    "min_temperature": 15.8,
+    "weather_code": 110,
     "weather_description": "Scattered clouds",
     "flight_date": "2023-08-15",
     "departure_city": "Europe/Istanbul",
@@ -47,9 +47,9 @@
     "arrival_terminal": "",
     "arrival_scheduled": "2023-08-15T05:05:00+00:00",
     "arrival_estimated": "2023-08-15T05:05:00+00:00",
-    "description": "Scattered clouds",
-    "min_chance": 0,
-    "max_chance": 5
+    "description": "Hurricane",
+    "min_chance": 60,
+    "max_chance": 85
   },
   {
     "city": "İstanbul",

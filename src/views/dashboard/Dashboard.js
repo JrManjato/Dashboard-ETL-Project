@@ -17,10 +17,9 @@ import jsonData from './Provider'
 const Dashboard = () => {
 
   const Average = (max, min) => {
-    if(max !== undefined && min !== undefined) {
+    if (max !== undefined && min !== undefined) {
       return (max + min) / 2;
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -50,7 +49,14 @@ const Dashboard = () => {
   }
 
   function formatDateTime(dateTimeString) {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    };
     const dateTime = new Date(dateTimeString);
     return dateTime.toLocaleString('en-US', options);
   }
@@ -74,7 +80,7 @@ const Dashboard = () => {
           {jsonData.map((item, index) => (
             <CTableRow v-for="item in tableItems" key={index}>
               <CTableDataCell className="text-center">
-                 <span>{item.company_airline}</span>
+                <span>{item.company_airline}</span>
               </CTableDataCell>
               <CTableDataCell className="text-center">
                 <CIcon size="xl" icon={coreuiIcons[formatCountryCode(item.country)]} title={item.country}/>
@@ -103,15 +109,14 @@ const Dashboard = () => {
                   <div className="float-start">
                     <strong>{Average(item.max_chance, item.min_chance)} %</strong>
                   </div>
-                  <br />
+                  <br/>
                   <div>
                     <u className='text-info text-sm' style={{fontSize: '12px'}}>Forecast Day: </u>
                     <small className="text-medium-emphasis">{formatDate(item.forecast_day)}</small>
                   </div>
-                <span>Average</span>
-                <CProgress thin
-                           color={progressColor(Average(item.max_chance, item.min_chance))}
-                           value={Average(item.max_chance, item.min_chance)}/>
+                  <CProgress thin
+                             color={progressColor(Average(item.max_chance, item.min_chance))}
+                             value={Average(item.max_chance, item.min_chance)}/>
                 </div>
               </CTableDataCell>
             </CTableRow>
